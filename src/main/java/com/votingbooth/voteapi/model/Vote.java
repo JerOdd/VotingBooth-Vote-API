@@ -35,7 +35,17 @@ public class Vote {
         return value;
     }
 
+    public VoteStatus getStatus() {
+        return switch (value) {
+            case 0 -> VoteStatus.NO;
+            case 1 -> VoteStatus.YES;
+            default -> VoteStatus.NOTA;
+        };
+    }
+
     public String getId() {
         return lawId + ":" + userId;
     }
 }
+
+

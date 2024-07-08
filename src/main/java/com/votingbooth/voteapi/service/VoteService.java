@@ -21,7 +21,7 @@ public class VoteService {
         if (!voteRepository.isLawOpen(vote.getLawId())) {
             throw new LawNotOpenException();
         }
-        if (!voteRepository.hasUserAlreadyVoted(vote.getUserId(), vote.getLawId())) {
+        if (voteRepository.hasUserAlreadyVoted(vote.getUserId(), vote.getLawId())) {
             throw new UserAlreadyVotedException();
         }
         String id = voteRepository.vote(vote);
