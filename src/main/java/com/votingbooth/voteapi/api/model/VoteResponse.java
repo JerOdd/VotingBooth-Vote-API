@@ -1,17 +1,13 @@
 package com.votingbooth.voteapi.api.model;
 
+import com.votingbooth.voteapi.model.VoteResult;
+
 public class VoteResponse {
     private String id;
+    private VoteResult voteResult;
 
-    public VoteResponse(String id) {
+    public VoteResponse(String id, VoteResult voteResult) {
         this.id = id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return id;
+        this.voteResult = voteResult;
     }
 }

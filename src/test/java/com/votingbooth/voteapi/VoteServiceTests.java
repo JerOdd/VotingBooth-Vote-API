@@ -1,5 +1,6 @@
 package com.votingbooth.voteapi;
 
+import com.votingbooth.voteapi.model.LawStatus;
 import com.votingbooth.voteapi.model.Vote;
 import com.votingbooth.voteapi.model.VoteResult;
 import com.votingbooth.voteapi.model.exception.LawNotOpenException;
@@ -28,12 +29,12 @@ public class VoteServiceTests {
         String notExistingLawId = UUID.randomUUID().toString();
         String existingLawId = UUID.randomUUID().toString();
         Integer value = 1;
-        jedis.set("laws:"+existingLawId, "1");
+        jedis.set("laws:"+existingLawId, LawStatus.OPEN.toString());
         assertThrows(LawNotOpenException.class, () -> {
             voteService.vote(new Vote(userId, notExistingLawId, value));
         });
         assertDoesNotThrow(() -> {
-            String voteId = voteService.vote(new Vote(userId, existingLawId, value));
+            voteService.vote(new Vote(userId, existingLawId, value));
         });
         assertThrows(UserAlreadyVotedException.class, () -> {
             voteService.vote(new Vote(userId, existingLawId, value));
@@ -43,7 +44,7 @@ public class VoteServiceTests {
     @Test
     void voteResult() {
         String lawId = UUID.randomUUID().toString();
-        jedis.set("laws:" + lawId, "1");
+        jedis.set("laws:" + lawId, LawStatus.OPEN.toString());
         for (int i = 0; i < 6; i++) {
             String userId = UUID.randomUUID().toString();
             int value = switch (i) {
@@ -55,9 +56,12 @@ public class VoteServiceTests {
                 voteService.vote(new Vote(userId, lawId, value));
             });
         }
-        VoteResult voteResult = voteService.getVoteResult(lawId);
-        assertEquals(voteResult.getYes(), 3);
-        assertEquals(voteResult.getNo(), 2);
-        assertEquals(voteResult.getNota(), 1);
+
+        assertDoesNotThrow(() -> {
+            VoteResult voteResult = voteService.getVoteResult(lawId);
+            assertEquals(voteResult.getYes(), 3);
+            assertEquals(voteResult.getNo(), 2);
+            assertEquals(voteResult.getNota(), 1);
+        });
     }
 }

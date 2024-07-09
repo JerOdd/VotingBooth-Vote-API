@@ -1,8 +1,8 @@
 package com.votingbooth.voteapi.repository;
 
+import com.votingbooth.voteapi.model.LawStatus;
 import com.votingbooth.voteapi.model.Vote;
 import com.votingbooth.voteapi.model.VoteResult;
-import com.votingbooth.voteapi.model.VoteStatus;
 import org.springframework.stereotype.Repository;
 import redis.clients.jedis.JedisPooled;
 import redis.clients.jedis.resps.Tuple;
@@ -14,7 +14,17 @@ public class VoteRepository {
     JedisPooled jedis = new JedisPooled("localhost", 6379);
 
     public boolean isLawOpen(String lawId) {
-        return jedis.get("laws:"+lawId) != null;
+        return getLawStatus(lawId) == LawStatus.OPEN;
+    }
+
+    public boolean isLawExisting(String lawId) {
+        return getLawStatus(lawId) != null;
+    }
+
+    private LawStatus getLawStatus(String lawId) {
+        String lawStatusValue = jedis.get("laws:"+lawId);
+        if (lawStatusValue == null) return null;
+        return LawStatus.valueOf(lawStatusValue);
     }
 
     public boolean hasUserAlreadyVoted(String userId, String lawId) {
