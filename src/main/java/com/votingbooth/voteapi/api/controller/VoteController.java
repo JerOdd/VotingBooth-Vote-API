@@ -1,5 +1,6 @@
 package com.votingbooth.voteapi.api.controller;
 
+import com.votingbooth.voteapi.api.model.ChangeVoteStatusRequest;
 import com.votingbooth.voteapi.api.model.VoteResponse;
 import com.votingbooth.voteapi.model.Vote;
 import com.votingbooth.voteapi.model.VoteResult;
@@ -53,6 +54,15 @@ public class VoteController {
                 exc
             );
         }
+    }
+
+    @PatchMapping("/votes/{lawId}")
+    public ResponseEntity<VoteResult> changeVoteStatus(
+        @PathVariable String lawId,
+        @RequestBody ChangeVoteStatusRequest changeVoteStatusRequest
+    ) {
+        voteService.changeVoteStatus(lawId, changeVoteStatusRequest.getStatus());
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }

@@ -1,5 +1,6 @@
 package com.votingbooth.voteapi.service;
 
+import com.votingbooth.voteapi.model.VoteStatus;
 import com.votingbooth.voteapi.model.Vote;
 import com.votingbooth.voteapi.model.VoteResult;
 import com.votingbooth.voteapi.model.exception.LawDoesNotExistException;
@@ -17,6 +18,10 @@ public class VoteService {
     @Autowired
     public VoteService(VoteRepository voteRepository) {
         this.voteRepository = voteRepository;
+    }
+
+    public void changeVoteStatus(String lawId, VoteStatus voteStatus) {
+        voteRepository.changeVoteStatus(lawId, voteStatus);
     }
 
     public VoteResult vote(Vote vote) throws LawNotOpenException, UserAlreadyVotedException {

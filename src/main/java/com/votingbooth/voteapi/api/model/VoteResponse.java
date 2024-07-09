@@ -10,4 +10,12 @@ public class VoteResponse {
         this.id = id;
         this.voteResult = voteResult;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public VoteResult getVoteResult() {
+        return voteResult;
+    }
 }

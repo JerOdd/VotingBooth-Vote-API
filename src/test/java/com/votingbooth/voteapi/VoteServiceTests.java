@@ -1,6 +1,6 @@
 package com.votingbooth.voteapi;
 
-import com.votingbooth.voteapi.model.LawStatus;
+import com.votingbooth.voteapi.model.VoteStatus;
 import com.votingbooth.voteapi.model.Vote;
 import com.votingbooth.voteapi.model.VoteResult;
 import com.votingbooth.voteapi.model.exception.LawNotOpenException;
@@ -21,15 +21,13 @@ public class VoteServiceTests {
     @Autowired
     private VoteService voteService;
 
-    JedisPooled jedis = new JedisPooled("localhost", 6379);
-
     @Test
     void vote() {
         String userId = UUID.randomUUID().toString();
         String notExistingLawId = UUID.randomUUID().toString();
         String existingLawId = UUID.randomUUID().toString();
         Integer value = 1;
-        jedis.set("laws:"+existingLawId, LawStatus.OPEN.toString());
+        voteService.changeVoteStatus(existingLawId, VoteStatus.OPEN);
         assertThrows(LawNotOpenException.class, () -> {
             voteService.vote(new Vote(userId, notExistingLawId, value));
         });
@@ -44,7 +42,7 @@ public class VoteServiceTests {
     @Test
     void voteResult() {
         String lawId = UUID.randomUUID().toString();
-        jedis.set("laws:" + lawId, LawStatus.OPEN.toString());
+        voteService.changeVoteStatus(lawId, VoteStatus.OPEN);
         for (int i = 0; i < 6; i++) {
             String userId = UUID.randomUUID().toString();
             int value = switch (i) {

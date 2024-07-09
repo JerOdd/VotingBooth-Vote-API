@@ -1,15 +1,13 @@
 package com.votingbooth.voteapi.repository;
 
-import com.votingbooth.voteapi.model.LawStatus;
+import com.votingbooth.voteapi.model.VoteStatus;
 import com.votingbooth.voteapi.model.Vote;
 import com.votingbooth.voteapi.model.VoteResult;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import redis.clients.jedis.JedisPooled;
 import redis.clients.jedis.resps.Tuple;
-import org.springframework.core.env.Environment;
 
 import java.util.List;
 
@@ -28,18 +26,22 @@ public class VoteRepository {
         jedis = new JedisPooled(redisHost, redisPort);
     }
 
+    public void changeVoteStatus(String lawId, VoteStatus voteStatus) {
+        jedis.set(getVoteStatusKey(lawId), voteStatus.toString());
+    }
+
     public boolean isLawOpen(String lawId) {
-        return getLawStatus(lawId) == LawStatus.OPEN;
+        return getVoteStatus(lawId) == VoteStatus.OPEN;
     }
 
     public boolean isLawExisting(String lawId) {
-        return getLawStatus(lawId) != null;
+        return getVoteStatus(lawId) != null;
     }
 
-    private LawStatus getLawStatus(String lawId) {
-        String lawStatusValue = jedis.get("laws:"+lawId);
+    private VoteStatus getVoteStatus(String lawId) {
+        String lawStatusValue = jedis.get("vote_status:"+lawId);
         if (lawStatusValue == null) return null;
-        return LawStatus.valueOf(lawStatusValue);
+        return VoteStatus.valueOf(lawStatusValue);
     }
 
     public boolean hasUserAlreadyVoted(String userId, String lawId) {
@@ -54,17 +56,21 @@ public class VoteRepository {
         return getVoteResult(lawId);
     }
 
-    private String getUserVoteKey(String userId, String lawId) {
-        return "votes:" + lawId + ":" + userId;
-    }
+
 
     public VoteResult getVoteResult(String lawId) {
         List<Tuple> scores = jedis.zrangeWithScores(getVoteKey(lawId), 0, -1);
         return new VoteResult(scores);
     }
 
+    private String getUserVoteKey(String userId, String lawId) {
+        return "votes:" + lawId + ":" + userId;
+    }
+
     private String getVoteKey(String lawId) {
         return "votes:" + lawId;
     }
+
+    private String getVoteStatusKey(String lawId) { return "vote_status:" + lawId; }
 
 }

@@ -12,7 +12,7 @@ public class VoteResult {
 
     public VoteResult(List<Tuple> scores) {
         for (Tuple score: scores) {
-            VoteStatus status = VoteStatus.valueOf(score.getElement());
+            VoteChoice status = VoteChoice.valueOf(score.getElement());
             switch (status) {
                 case YES -> yes = (int) score.getScore();
                 case NO -> no = (int) score.getScore();

@@ -35,11 +35,11 @@ public class Vote {
         return value;
     }
 
-    public VoteStatus getStatus() {
+    public VoteChoice getStatus() {
         return switch (value) {
-            case 0 -> VoteStatus.NO;
-            case 1 -> VoteStatus.YES;
-            default -> VoteStatus.NOTA;
+            case 0 -> VoteChoice.NO;
+            case 1 -> VoteChoice.YES;
+            default -> VoteChoice.NOTA;
         };
     }
 
