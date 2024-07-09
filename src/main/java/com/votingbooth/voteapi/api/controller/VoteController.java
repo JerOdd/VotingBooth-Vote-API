@@ -17,12 +17,8 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 public class VoteController {
 
-    private final VoteService voteService;
-
     @Autowired
-    public VoteController(VoteService voteService) {
-        this.voteService = voteService;
-    }
+    private VoteService voteService;
 
     @PostMapping("/votes")
     public ResponseEntity<VoteResponse> vote(@RequestBody Vote vote) {

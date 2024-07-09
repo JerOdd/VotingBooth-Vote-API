@@ -13,12 +13,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class VoteService {
 
-    private final VoteRepository voteRepository;
-
     @Autowired
-    public VoteService(VoteRepository voteRepository) {
-        this.voteRepository = voteRepository;
-    }
+    private VoteRepository voteRepository;
 
     public void changeVoteStatus(String lawId, VoteStatus voteStatus) {
         voteRepository.changeVoteStatus(lawId, voteStatus);
