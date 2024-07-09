@@ -48,7 +48,7 @@ public class VoteController {
             return ResponseEntity.status(HttpStatus.OK).body(voteResult);
         } catch (LawDoesNotExistException exc) {
             throw new ResponseStatusException(
-                HttpStatus.CONFLICT,
+                HttpStatus.NOT_FOUND,
                 "Law " + lawId + " does not exist",
                 exc
             );
