@@ -5,9 +5,11 @@ import com.votingbooth.voteapi.model.Vote;
 import com.votingbooth.voteapi.model.VoteResult;
 import com.votingbooth.voteapi.model.exception.LawNotOpenException;
 import com.votingbooth.voteapi.model.exception.UserAlreadyVotedException;
+import com.votingbooth.voteapi.repository.VoteRepository;
 import com.votingbooth.voteapi.service.VoteService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import redis.clients.jedis.JedisPooled;
 
@@ -15,7 +17,8 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+@SpringBootTest(classes = { VoteService.class, VoteRepository.class})
+@EnableConfigurationProperties
 public class VoteServiceTests {
 
     @Autowired
