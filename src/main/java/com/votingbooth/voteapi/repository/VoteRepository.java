@@ -1,8 +1,13 @@
 package com.votingbooth.voteapi.repository;
 
 import com.votingbooth.voteapi.model.Vote;
+import com.votingbooth.voteapi.model.VoteResult;
+import com.votingbooth.voteapi.model.VoteStatus;
 import org.springframework.stereotype.Repository;
 import redis.clients.jedis.JedisPooled;
+import redis.clients.jedis.resps.Tuple;
+
+import java.util.List;
 
 @Repository
 public class VoteRepository {
@@ -17,14 +22,20 @@ public class VoteRepository {
     }
 
 
-    public String vote(Vote vote) {
-        jedis.set(getUserVoteKey(vote.getUserId(), vote.getLawId()), vote.getValue().toString());
-        jedis.zincrby(getVoteKey(vote.getLawId()), 1, vote.getStatus().toString());
-        return vote.getId();
+    public VoteResult vote(Vote vote) {
+        String lawId = vote.getLawId();
+        jedis.set(getUserVoteKey(vote.getUserId(), lawId), vote.getValue().toString());
+        jedis.zincrby(getVoteKey(lawId), 1, vote.getStatus().toString());
+        return getVoteResult(lawId);
     }
 
     private String getUserVoteKey(String userId, String lawId) {
         return "votes:" + lawId + ":" + userId;
+    }
+
+    public VoteResult getVoteResult(String lawId) {
+        List<Tuple> scores = jedis.zrangeWithScores(getVoteKey(lawId), 0, -1);
+        return new VoteResult(scores);
     }
 
     private String getVoteKey(String lawId) {

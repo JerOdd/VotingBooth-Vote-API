@@ -1,6 +1,7 @@
 package com.votingbooth.voteapi;
 
 import com.votingbooth.voteapi.model.Vote;
+import com.votingbooth.voteapi.model.VoteResult;
 import com.votingbooth.voteapi.model.exception.LawNotOpenException;
 import com.votingbooth.voteapi.model.exception.UserAlreadyVotedException;
 import com.votingbooth.voteapi.service.VoteService;
@@ -11,8 +12,7 @@ import redis.clients.jedis.JedisPooled;
 
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class VoteServiceTests {
@@ -34,10 +34,30 @@ public class VoteServiceTests {
         });
         assertDoesNotThrow(() -> {
             String voteId = voteService.vote(new Vote(userId, existingLawId, value));
-            System.out.println("VoteId: "+voteId);
         });
         assertThrows(UserAlreadyVotedException.class, () -> {
             voteService.vote(new Vote(userId, existingLawId, value));
         });
+    }
+
+    @Test
+    void voteResult() {
+        String lawId = UUID.randomUUID().toString();
+        jedis.set("laws:" + lawId, "1");
+        for (int i = 0; i < 6; i++) {
+            String userId = UUID.randomUUID().toString();
+            int value = switch (i) {
+                case 0, 1, 2 -> 1;
+                case 3, 4 -> 0;
+                default -> -1;
+            };
+            assertDoesNotThrow(() -> {
+                voteService.vote(new Vote(userId, lawId, value));
+            });
+        }
+        VoteResult voteResult = voteService.getVoteResult(lawId);
+        assertEquals(voteResult.getYes(), 3);
+        assertEquals(voteResult.getNo(), 2);
+        assertEquals(voteResult.getNota(), 1);
     }
 }

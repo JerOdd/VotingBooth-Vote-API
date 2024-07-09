@@ -1,6 +1,7 @@
 package com.votingbooth.voteapi.service;
 
 import com.votingbooth.voteapi.model.Vote;
+import com.votingbooth.voteapi.model.VoteResult;
 import com.votingbooth.voteapi.model.exception.LawNotOpenException;
 import com.votingbooth.voteapi.model.exception.UserAlreadyVotedException;
 import com.votingbooth.voteapi.repository.VoteRepository;
@@ -17,16 +18,18 @@ public class VoteService {
         this.voteRepository = voteRepository;
     }
 
-    public String vote(Vote vote) throws LawNotOpenException, UserAlreadyVotedException {
+    public VoteResult vote(Vote vote) throws LawNotOpenException, UserAlreadyVotedException {
         if (!voteRepository.isLawOpen(vote.getLawId())) {
             throw new LawNotOpenException();
         }
         if (voteRepository.hasUserAlreadyVoted(vote.getUserId(), vote.getLawId())) {
             throw new UserAlreadyVotedException();
         }
-        String id = voteRepository.vote(vote);
-        // TODO: Send to queue
-        return id;
+        return voteRepository.vote(vote);
+    }
+
+    public VoteResult getVoteResult(String lawId) {
+        return voteRepository.getVoteResult(lawId);
     }
 
 }

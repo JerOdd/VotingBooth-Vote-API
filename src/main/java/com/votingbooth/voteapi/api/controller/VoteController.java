@@ -25,9 +25,6 @@ public class VoteController {
 
     @PostMapping("/votes")
     public ResponseEntity<VoteResponse> vote(@RequestBody Vote vote) {
-        System.out.println(
-            "Vote: user_id: " + vote.getUserId() + " law_id: " + vote.getLawId() + " value: " + vote.getValue()
-        );
         try {
             String id = voteService.vote(vote);
             return ResponseEntity.status(HttpStatus.CREATED).body(new VoteResponse(id));
