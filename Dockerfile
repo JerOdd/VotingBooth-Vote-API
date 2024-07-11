@@ -1,3 +1,10 @@
 FROM openjdk:17
-ADD target/*.jar vote-api.jar
-ENTRYPOINT ["java","-jar","/vote-api.jar"]
+
+WORKDIR /app
+COPY . /app
+
+RUN ./mvnw  -B -DskipTests clean package
+
+EXPOSE 8080
+
+CMD ["java", "-jar", "target/VoteAPI-0.0.1-SNAPSHOT.jar"]
