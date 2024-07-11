@@ -31,7 +31,7 @@ jobs:
           name: "Build and push Docker image"
           command: |
             docker login -u $DOCKER_USER -p $DOCKER_PASS $DOCKER_REGISTRY
-            docker build -t $DOCKER_REGISTRY/vote-api:latest .
+            docker build -t $DOCKER_REGISTRY/vote-api/vote-api:latest .
             docker push $DOCKER_REGISTRY/vote-api/vote-api:latest
 
 workflows:
