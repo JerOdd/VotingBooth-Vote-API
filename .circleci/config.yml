@@ -15,7 +15,7 @@ jobs:
           command: mvn -B -DskipTests clean package
       - run:
           name: Test
-          command: mvn test
+          command: mvn -DREDIS_HOST=localhost -DREDIS_PORT=6379 test
   deploy-docker-image:
     executor:
       name: docker/docker
