@@ -47,5 +47,6 @@ workflows:
     jobs:
       - build-and-test
       - deploy-docker-image:
+          context: VotingBooth
           requires:
             - build-and-test
