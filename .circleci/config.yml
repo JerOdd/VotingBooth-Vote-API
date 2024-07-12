@@ -35,9 +35,13 @@ jobs:
             docker push $DOCKER_REGISTRY/vote-api/vote-api:latest
 
 workflows:
-  test-and-deploy:
+  test:
     jobs:
       - build-and-test
+  test-and-deploy:
+    when:
+      - equal: [ develop, << pipeline.git.branch >> ]
+    jobs:
       - deploy-docker-image:
           requires:
             - build-and-test
