@@ -37,13 +37,13 @@ jobs:
 workflows:
   test:
     when:
-      - not:
-        - equal: [ develop, << pipeline.git.branch >> ]
+      not:
+        equal: [ develop, << pipeline.git.branch >> ]
     jobs:
       - build-and-test
   test-and-deploy:
     when:
-      - equal: [ develop, << pipeline.git.branch >> ]
+      equal: [ develop, << pipeline.git.branch >> ]
     jobs:
       - build-and-test
       - deploy-docker-image:
