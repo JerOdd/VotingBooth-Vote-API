@@ -25,7 +25,7 @@ public class VoteServiceTests {
     private VoteService voteService;
 
     @Test
-    void vote() {
+    void vote_assertLawNotOpen() {
         String userId = UUID.randomUUID().toString();
         String notExistingLawId = UUID.randomUUID().toString();
         String existingLawId = UUID.randomUUID().toString();
