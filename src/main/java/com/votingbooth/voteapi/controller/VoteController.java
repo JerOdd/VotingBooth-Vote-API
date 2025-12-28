@@ -2,6 +2,8 @@ package com.votingbooth.voteapi.controller;
 
 import com.votingbooth.voteapi.model.api.VoteResponse;
 import com.votingbooth.voteapi.model.vote.Vote;
+import com.votingbooth.voteapi.model.vote.VoteId;
+import com.votingbooth.voteapi.model.vote.VoteRequest;
 import com.votingbooth.voteapi.model.vote.VoteResult;
 import com.votingbooth.voteapi.model.exception.LawDoesNotExistException;
 import com.votingbooth.voteapi.model.exception.LawNotOpenException;
@@ -22,24 +24,26 @@ public class VoteController {
     private VoteService voteService;
 
     @PostMapping("/votes")
-    public ResponseEntity<VoteResponse> vote(@RequestBody Vote vote) {
+    public ResponseEntity<VoteResponse> vote(@RequestBody VoteRequest voteRequest) {
         try {
-            Vote voted = voteService.vote(vote);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new VoteResponse(voted));
+            voteService.vote(
+                    new Vote(new VoteId(voteRequest.userId(), voteRequest.lawId()), voteRequest.result())
+            );
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (LawNotOpenException exc) {
             throw new ResponseStatusException(
-                HttpStatus.CONFLICT, vote.getLawId() + " is not open.", exc
+                HttpStatus.CONFLICT, voteRequest.lawId() + " is not open.", exc
             );
         } catch (UserAlreadyVotedException exc) {
             throw new ResponseStatusException(
                 HttpStatus.CONFLICT,
-                vote.getUserId() + " already voted " + vote.getLawId(),
+                voteRequest.userId() + " already voted " + voteRequest.lawId(),
                 exc
             );
         } catch (LawDoesNotExistException exc) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
-                    vote.getLawId() + " doesn't exist." + vote.getLawId(),
+                    voteRequest.lawId() + " doesn't exist.",
                     exc
             );
         }

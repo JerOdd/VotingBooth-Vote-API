@@ -31,6 +31,10 @@ public class Vote {
     public UUID getUserId() {
         return id.getUserId();
     }
+
+    public Integer getValue() {
+        return value;
+    }
 }
 
 

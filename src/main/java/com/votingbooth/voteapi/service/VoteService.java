@@ -13,6 +13,7 @@ import com.votingbooth.voteapi.model.exception.LawNotOpenException;
 import com.votingbooth.voteapi.model.exception.UserAlreadyVotedException;
 import com.votingbooth.voteapi.dataaccess.repository.VoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -28,7 +29,7 @@ public class VoteService {
     @Autowired
     private LawClient lawClient;
 
-    public Vote vote(Vote vote) throws LawNotOpenException, UserAlreadyVotedException, LawDoesNotExistException {
+    public void vote(Vote vote) throws LawNotOpenException, UserAlreadyVotedException, LawDoesNotExistException {
         LawResponse lawResponse = lawClient.getLaw(vote.getLawId());
         if (lawResponse == null) {
             throw new LawDoesNotExistException();
@@ -40,7 +41,11 @@ public class VoteService {
         if (law.getStatus() != LawStatus.VOTING) {
             throw new LawNotOpenException();
         }
-        return voteRepository.save(vote);
+        try {
+            voteRepository.create(vote.getUserId(), vote.getLawId(), vote.getValue());
+        } catch (DataIntegrityViolationException e) {
+            throw new UserAlreadyVotedException();
+        }
     }
 
     public VoteResult getVoteResult(UUID lawId) throws LawNotVotedException {
