@@ -1,40 +1,56 @@
 package com.votingbooth.voteapi.service;
 
-import com.votingbooth.voteapi.model.VoteStatus;
-import com.votingbooth.voteapi.model.Vote;
-import com.votingbooth.voteapi.model.VoteResult;
+import com.votingbooth.voteapi.dataaccess.client.law.LawClient;
+import com.votingbooth.voteapi.dataaccess.repository.VoteResultRepository;
+import com.votingbooth.voteapi.model.exception.LawNotVotedException;
+import com.votingbooth.voteapi.model.law.Law;
+import com.votingbooth.voteapi.model.law.LawResponse;
+import com.votingbooth.voteapi.model.law.LawStatus;
+import com.votingbooth.voteapi.model.vote.Vote;
+import com.votingbooth.voteapi.model.vote.VoteResult;
 import com.votingbooth.voteapi.model.exception.LawDoesNotExistException;
 import com.votingbooth.voteapi.model.exception.LawNotOpenException;
 import com.votingbooth.voteapi.model.exception.UserAlreadyVotedException;
-import com.votingbooth.voteapi.repository.VoteRepository;
+import com.votingbooth.voteapi.dataaccess.repository.VoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class VoteService {
 
     @Autowired
     private VoteRepository voteRepository;
+    @Autowired
+    private VoteResultRepository voteResultRepository;
+    @Autowired
+    private LawClient lawClient;
 
-    public void changeVoteStatus(String lawId, VoteStatus voteStatus) {
-        voteRepository.changeVoteStatus(lawId, voteStatus);
-    }
-
-    public VoteResult vote(Vote vote) throws LawNotOpenException, UserAlreadyVotedException {
-        if (!voteRepository.isLawOpen(vote.getLawId())) {
-            throw new LawNotOpenException();
-        }
-        if (voteRepository.hasUserAlreadyVoted(vote.getUserId(), vote.getLawId())) {
-            throw new UserAlreadyVotedException();
-        }
-        return voteRepository.vote(vote);
-    }
-
-    public VoteResult getVoteResult(String lawId) throws LawDoesNotExistException {
-        if (!voteRepository.isLawExisting(lawId)) {
+    public void vote(Vote vote) throws LawNotOpenException, UserAlreadyVotedException, LawDoesNotExistException {
+        LawResponse lawResponse = lawClient.getLaw(vote.getLawId());
+        if (lawResponse == null) {
             throw new LawDoesNotExistException();
         }
-        return voteRepository.getVoteResult(lawId);
+        Law law = lawResponse.getLaw();
+        if (law == null) {
+            throw new LawDoesNotExistException();
+        }
+        if (law.getStatus() != LawStatus.VOTING) {
+            throw new LawNotOpenException();
+        }
+        try {
+            voteRepository.create(vote.getUserId(), vote.getLawId(), vote.getValue());
+        } catch (DataIntegrityViolationException e) {
+            throw new UserAlreadyVotedException();
+        }
+    }
+
+    public VoteResult getVoteResult(UUID lawId) throws LawNotVotedException {
+        Optional<VoteResult> voteResult = voteResultRepository.findById(lawId);
+        return voteResult.orElseThrow(LawNotVotedException::new);
     }
 
 }

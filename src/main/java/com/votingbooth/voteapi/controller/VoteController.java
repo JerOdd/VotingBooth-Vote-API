@@ -1,9 +1,10 @@
-package com.votingbooth.voteapi.api.controller;
+package com.votingbooth.voteapi.controller;
 
-import com.votingbooth.voteapi.api.model.ChangeVoteStatusRequest;
-import com.votingbooth.voteapi.api.model.VoteResponse;
-import com.votingbooth.voteapi.model.Vote;
-import com.votingbooth.voteapi.model.VoteResult;
+import com.votingbooth.voteapi.model.api.VoteResponse;
+import com.votingbooth.voteapi.model.vote.Vote;
+import com.votingbooth.voteapi.model.vote.VoteId;
+import com.votingbooth.voteapi.model.vote.VoteRequest;
+import com.votingbooth.voteapi.model.vote.VoteResult;
 import com.votingbooth.voteapi.model.exception.LawDoesNotExistException;
 import com.votingbooth.voteapi.model.exception.LawNotOpenException;
 import com.votingbooth.voteapi.model.exception.UserAlreadyVotedException;
@@ -14,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.UUID;
+
 @RestController
 public class VoteController {
 
@@ -21,44 +24,43 @@ public class VoteController {
     private VoteService voteService;
 
     @PostMapping("/votes")
-    public ResponseEntity<VoteResponse> vote(@RequestBody Vote vote) {
+    public ResponseEntity<VoteResponse> vote(@RequestBody VoteRequest voteRequest) {
         try {
-            VoteResult voteResult = voteService.vote(vote);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new VoteResponse(vote.getId(), voteResult));
+            voteService.vote(
+                    new Vote(new VoteId(voteRequest.userId(), voteRequest.lawId()), voteRequest.result())
+            );
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (LawNotOpenException exc) {
             throw new ResponseStatusException(
-                HttpStatus.CONFLICT, vote.getLawId() + " is not open", exc
+                HttpStatus.CONFLICT, voteRequest.lawId() + " is not open.", exc
             );
         } catch (UserAlreadyVotedException exc) {
             throw new ResponseStatusException(
                 HttpStatus.CONFLICT,
-                vote.getUserId() + " already voted " + vote.getLawId(),
+                voteRequest.userId() + " already voted " + voteRequest.lawId(),
                 exc
+            );
+        } catch (LawDoesNotExistException exc) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    voteRequest.lawId() + " doesn't exist.",
+                    exc
             );
         }
     }
 
     @GetMapping("/votes/{lawId}")
-    public ResponseEntity<VoteResult> getVoteResult(@PathVariable String lawId) {
+    public ResponseEntity<VoteResult> getVoteResult(@PathVariable UUID lawId) {
         try {
             VoteResult voteResult = voteService.getVoteResult(lawId);
             return ResponseEntity.status(HttpStatus.OK).body(voteResult);
-        } catch (LawDoesNotExistException exc) {
+        } catch (Exception exc) {
             throw new ResponseStatusException(
                 HttpStatus.NOT_FOUND,
-                "Law " + lawId + " does not exist",
+                lawId + " has no results yet.",
                 exc
             );
         }
-    }
-
-    @PatchMapping("/votes/{lawId}")
-    public ResponseEntity<VoteResult> changeVoteStatus(
-        @PathVariable String lawId,
-        @RequestBody ChangeVoteStatusRequest changeVoteStatusRequest
-    ) {
-        voteService.changeVoteStatus(lawId, changeVoteStatusRequest.getStatus());
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }

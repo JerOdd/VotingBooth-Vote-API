@@ -1,17 +1,15 @@
 package com.votingbooth.voteapi;
 
-import com.votingbooth.voteapi.model.VoteStatus;
-import com.votingbooth.voteapi.model.Vote;
-import com.votingbooth.voteapi.model.VoteResult;
+import com.votingbooth.voteapi.model.vote.Vote;
+import com.votingbooth.voteapi.model.vote.VoteResult;
 import com.votingbooth.voteapi.model.exception.LawNotOpenException;
 import com.votingbooth.voteapi.model.exception.UserAlreadyVotedException;
-import com.votingbooth.voteapi.repository.VoteRepository;
+import com.votingbooth.voteapi.dataaccess.repository.VoteRepository;
 import com.votingbooth.voteapi.service.VoteService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
-import redis.clients.jedis.JedisPooled;
 
 import java.util.UUID;
 
