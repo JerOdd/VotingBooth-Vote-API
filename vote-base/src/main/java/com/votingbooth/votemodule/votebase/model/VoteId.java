@@ -1,4 +1,4 @@
-package com.votingbooth.voteapi.model.vote;
+package com.votingbooth.votemodule.votebase.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

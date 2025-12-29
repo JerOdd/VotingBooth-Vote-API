@@ -15,7 +15,7 @@
 	<name>vote-module</name>
 	<description>Vote Module for VotingBooth</description>
 	<modules>
-		<module>vote-common</module>
+		<module>vote-base</module>
 		<module>vote-api</module>
 		<module>vote-listener</module>
 	</modules>

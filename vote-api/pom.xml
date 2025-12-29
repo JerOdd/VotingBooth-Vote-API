@@ -40,7 +40,7 @@
         </dependency>
         <dependency>
             <groupId>com.votingbooth.votemodule</groupId>
-            <artifactId>vote-common</artifactId>
+            <artifactId>vote-base</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>

@@ -1,16 +1,17 @@
 package com.votingbooth.voteapi.service;
 
 import com.votingbooth.voteapi.dataaccess.client.law.LawClient;
-import com.votingbooth.votemodule.votecommon.dataaccess.VoteResultRepository;
+import com.votingbooth.votemodule.votebase.dataaccess.VoteResultRepository;
 import com.votingbooth.voteapi.model.exception.LawNotVotedException;
 import com.votingbooth.voteapi.model.law.Law;
 import com.votingbooth.voteapi.model.law.LawResponse;
 import com.votingbooth.voteapi.model.law.LawStatus;
-import com.votingbooth.votemodule.votecommon.model.Vote;
+import com.votingbooth.votemodule.votebase.model.VoteDto;
 import com.votingbooth.voteapi.model.exception.LawDoesNotExistException;
 import com.votingbooth.voteapi.model.exception.LawNotOpenException;
 import com.votingbooth.voteapi.model.exception.UserAlreadyVotedException;
 import com.votingbooth.voteapi.dataaccess.repository.VoteRepository;
+import com.votingbooth.votemodule.votebase.model.VoteResultDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ public class VoteService {
     @Autowired
     private LawClient lawClient;
 
-    public void vote(Vote vote) throws LawNotOpenException, UserAlreadyVotedException, LawDoesNotExistException {
+    public void vote(VoteDto vote) throws LawNotOpenException, UserAlreadyVotedException, LawDoesNotExistException {
         LawResponse lawResponse = lawClient.getLaw(vote.getLawId());
         if (lawResponse == null) {
             throw new LawDoesNotExistException();
@@ -47,8 +48,8 @@ public class VoteService {
         }
     }
 
-    public VoteResult getVoteResult(UUID lawId) throws LawNotVotedException {
-        Optional<VoteResult> voteResult = voteResultRepository.findById(lawId);
+    public VoteResultDto getVoteResult(UUID lawId) throws LawNotVotedException {
+        Optional<VoteResultDto> voteResult = voteResultRepository.findById(lawId);
         return voteResult.orElseThrow(LawNotVotedException::new);
     }
 

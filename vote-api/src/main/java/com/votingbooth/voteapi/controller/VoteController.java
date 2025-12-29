@@ -1,13 +1,14 @@
 package com.votingbooth.voteapi.controller;
 
 import com.votingbooth.voteapi.model.api.VoteResponse;
-import com.votingbooth.votemodule.votecommon.model.Vote;
-import com.votingbooth.voteapi.model.vote.VoteId;
+import com.votingbooth.votemodule.votebase.model.VoteDto;
+import com.votingbooth.votemodule.votebase.model.VoteId;
 import com.votingbooth.voteapi.model.vote.VoteRequest;
 import com.votingbooth.voteapi.model.exception.LawDoesNotExistException;
 import com.votingbooth.voteapi.model.exception.LawNotOpenException;
 import com.votingbooth.voteapi.model.exception.UserAlreadyVotedException;
 import com.votingbooth.voteapi.service.VoteService;
+import com.votingbooth.votemodule.votebase.model.VoteResultDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class VoteController {
     public ResponseEntity<VoteResponse> vote(@RequestBody VoteRequest voteRequest) {
         try {
             voteService.vote(
-                    new Vote(new VoteId(voteRequest.userId(), voteRequest.lawId()), voteRequest.value())
+                    new VoteDto(new VoteId(voteRequest.userId(), voteRequest.lawId()), voteRequest.value())
             );
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (LawNotOpenException exc) {
@@ -49,9 +50,9 @@ public class VoteController {
     }
 
     @GetMapping("/votes/{lawId}")
-    public ResponseEntity<VoteResult> getVoteResult(@PathVariable UUID lawId) {
+    public ResponseEntity<VoteResultDto> getVoteResult(@PathVariable UUID lawId) {
         try {
-            VoteResult voteResult = voteService.getVoteResult(lawId);
+            VoteResultDto voteResult = voteService.getVoteResult(lawId);
             return ResponseEntity.status(HttpStatus.OK).body(voteResult);
         } catch (Exception exc) {
             throw new ResponseStatusException(
