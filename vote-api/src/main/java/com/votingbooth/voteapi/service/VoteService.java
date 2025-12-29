@@ -1,7 +1,7 @@
 package com.votingbooth.voteapi.service;
 
 import com.votingbooth.voteapi.dataaccess.client.law.LawClient;
-import com.votingbooth.voteapi.dataaccess.repository.VoteResultRepository;
+import com.votingbooth.votemodule.votecommon.dataaccess.VoteResultRepository;
 import com.votingbooth.voteapi.model.exception.LawNotVotedException;
 import com.votingbooth.voteapi.model.law.Law;
 import com.votingbooth.voteapi.model.law.LawResponse;

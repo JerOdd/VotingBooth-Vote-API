@@ -9,7 +9,6 @@
     </parent>
     <groupId>com.votingbooth.votemodule</groupId>
     <artifactId>vote-api</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
     <name>vote-api</name>
     <description>vote-api</description>
     <url/>
@@ -38,6 +37,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.votingbooth.votemodule</groupId>
+            <artifactId>vote-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
