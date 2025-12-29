@@ -1,5 +1,6 @@
-package com.votingbooth.voteapi.model.vote;
+package com.votingbooth.votemodule.votecommon.model;
 
+import com.votingbooth.voteapi.model.vote.VoteId;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -9,7 +10,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "votes")
-public class Vote {
+public class VoteDto {
 
     @EmbeddedId
     private VoteId id;
@@ -17,9 +18,9 @@ public class Vote {
     @Column(nullable = false)
     private Integer value;
 
-    public Vote() {}
+    public VoteDto() {}
 
-    public Vote(VoteId id, Integer value) {
+    public VoteDto(VoteId id, Integer value) {
         this.id = id;
         this.value = value;
     }
@@ -36,5 +37,6 @@ public class Vote {
         return value;
     }
 }
+
 
 

@@ -1,16 +1,15 @@
-package com.votingbooth.voteapi.model.vote;
+package com.votingbooth.votemodule.votecommon.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "vote_results")
-public class VoteResult {
+public class VoteResultDto {
 
     @Id
     private UUID lawId;
@@ -21,7 +20,7 @@ public class VoteResult {
     @Column
     private int abstain;
 
-    public VoteResult() {}
+    public VoteResultDto() {}
 
     public int getYes() {
         return yes;

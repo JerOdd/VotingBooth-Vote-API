@@ -1,10 +1,9 @@
 package com.votingbooth.voteapi.controller;
 
 import com.votingbooth.voteapi.model.api.VoteResponse;
-import com.votingbooth.voteapi.model.vote.Vote;
+import com.votingbooth.votemodule.votecommon.model.Vote;
 import com.votingbooth.voteapi.model.vote.VoteId;
 import com.votingbooth.voteapi.model.vote.VoteRequest;
-import com.votingbooth.voteapi.model.vote.VoteResult;
 import com.votingbooth.voteapi.model.exception.LawDoesNotExistException;
 import com.votingbooth.voteapi.model.exception.LawNotOpenException;
 import com.votingbooth.voteapi.model.exception.UserAlreadyVotedException;

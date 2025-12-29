@@ -1,7 +1,6 @@
 package com.votingbooth.voteapi;
 
-import com.votingbooth.voteapi.model.vote.Vote;
-import com.votingbooth.voteapi.model.vote.VoteResult;
+import com.votingbooth.votemodule.votecommon.model.Vote;
 import com.votingbooth.voteapi.model.exception.LawNotOpenException;
 import com.votingbooth.voteapi.model.exception.UserAlreadyVotedException;
 import com.votingbooth.voteapi.dataaccess.repository.VoteRepository;

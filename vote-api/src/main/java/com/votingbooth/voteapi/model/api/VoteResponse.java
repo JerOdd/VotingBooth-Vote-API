@@ -1,7 +1,6 @@
 package com.votingbooth.voteapi.model.api;
 
-import com.votingbooth.voteapi.model.vote.Vote;
-import com.votingbooth.voteapi.model.vote.VoteResult;
+import com.votingbooth.votemodule.votecommon.model.Vote;
 
 import java.util.UUID;
 
