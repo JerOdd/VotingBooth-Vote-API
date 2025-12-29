@@ -17,7 +17,7 @@
 	<modules>
 		<module>vote-common</module>
 		<module>vote-api</module>
-		<module>vote-consumer</module>
+		<module>vote-listener</module>
 	</modules>
 	<properties>
 		<java.version>17</java.version>
