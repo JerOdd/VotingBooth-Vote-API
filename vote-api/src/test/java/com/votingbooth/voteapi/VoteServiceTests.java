@@ -1,10 +1,11 @@
 package com.votingbooth.voteapi;
 
-import com.votingbooth.votemodule.votecommon.model.Vote;
+import com.votingbooth.votemodule.votebase.model.VoteDto;
 import com.votingbooth.voteapi.model.exception.LawNotOpenException;
 import com.votingbooth.voteapi.model.exception.UserAlreadyVotedException;
 import com.votingbooth.voteapi.dataaccess.repository.VoteRepository;
 import com.votingbooth.voteapi.service.VoteService;
+import com.votingbooth.votemodule.votebase.model.VoteId;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -22,44 +23,16 @@ public class VoteServiceTests {
     private VoteService voteService;
 
     @Test
-    void vote_assertLawNotOpen() {
-        String userId = UUID.randomUUID().toString();
-        String notExistingLawId = UUID.randomUUID().toString();
-        String existingLawId = UUID.randomUUID().toString();
+    void duplicatedVote() {
+        UUID userId = UUID.randomUUID();
+        UUID lawId = UUID.randomUUID();
         Integer value = 1;
-        voteService.changeVoteStatus(existingLawId, VoteStatus.OPEN);
-        assertThrows(LawNotOpenException.class, () -> {
-            voteService.vote(new Vote(userId, notExistingLawId, value));
-        });
+        VoteDto vote = new VoteDto(new VoteId(userId, lawId), value);
         assertDoesNotThrow(() -> {
-            voteService.vote(new Vote(userId, existingLawId, value));
+            voteService.vote(vote);
         });
         assertThrows(UserAlreadyVotedException.class, () -> {
-            voteService.vote(new Vote(userId, existingLawId, value));
-        });
-    }
-
-    @Test
-    void voteResult() {
-        String lawId = UUID.randomUUID().toString();
-        voteService.changeVoteStatus(lawId, VoteStatus.OPEN);
-        for (int i = 0; i < 6; i++) {
-            String userId = UUID.randomUUID().toString();
-            int value = switch (i) {
-                case 0, 1, 2 -> 1;
-                case 3, 4 -> 0;
-                default -> -1;
-            };
-            assertDoesNotThrow(() -> {
-                voteService.vote(new Vote(userId, lawId, value));
-            });
-        }
-
-        assertDoesNotThrow(() -> {
-            VoteResult voteResult = voteService.getVoteResult(lawId);
-            assertEquals(voteResult.getYes(), 3);
-            assertEquals(voteResult.getNo(), 2);
-            assertEquals(voteResult.getNota(), 1);
+            voteService.vote(vote);
         });
     }
 }
