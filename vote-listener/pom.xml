@@ -9,7 +9,6 @@
     </parent>
     <groupId>com.votingbooth.votemodule</groupId>
     <artifactId>vote-listener</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
     <name>vote-listener</name>
     <description>vote-listener</description>
     <url/>
@@ -29,6 +28,12 @@
         <java.version>17</java.version>
     </properties>
     <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-json</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-kafka</artifactId>
