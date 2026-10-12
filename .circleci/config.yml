@@ -7,7 +7,6 @@ jobs:
   build-and-test:
     docker:
       - image: cimg/openjdk:17.0
-      - image: cimg/redis:6.2
     steps:
       - checkout
       - run:
@@ -15,7 +14,7 @@ jobs:
           command: mvn -B -DskipTests clean package
       - run:
           name: Test
-          command: mvn -DREDIS_HOST=localhost -DREDIS_PORT=6379 test
+          command: mvn -B test
   deploy-docker-image:
     executor:
       name: docker/docker
