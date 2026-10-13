@@ -1,4 +1,4 @@
-package com.votingbooth.voteapi.client.law;
+package com.votingbooth.voteapi.dataaccess.client.law;
 
 import java.util.UUID;
 

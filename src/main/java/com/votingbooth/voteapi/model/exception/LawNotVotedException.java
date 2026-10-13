@@ -1,4 +1,4 @@
-package com.votingbooth.voteapi.exception;
+package com.votingbooth.voteapi.model.exception;
 
 import java.util.UUID;
 

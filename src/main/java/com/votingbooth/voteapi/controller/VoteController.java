@@ -1,7 +1,7 @@
 package com.votingbooth.voteapi.controller;
 
-import com.votingbooth.voteapi.dto.VoteRequest;
-import com.votingbooth.voteapi.dto.VoteResultResponse;
+import com.votingbooth.voteapi.model.dto.VoteRequest;
+import com.votingbooth.voteapi.model.dto.VoteResultResponse;
 import com.votingbooth.voteapi.service.VoteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

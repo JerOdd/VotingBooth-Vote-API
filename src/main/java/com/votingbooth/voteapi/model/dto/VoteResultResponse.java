@@ -1,4 +1,4 @@
-package com.votingbooth.voteapi.dto;
+package com.votingbooth.voteapi.model.dto;
 
 public record VoteResultResponse(long yes, long no, long abstain) {
 

@@ -1,4 +1,4 @@
-package com.votingbooth.voteapi.entity;
+package com.votingbooth.voteapi.model.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;

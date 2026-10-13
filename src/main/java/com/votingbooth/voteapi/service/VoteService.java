@@ -1,16 +1,16 @@
 package com.votingbooth.voteapi.service;
 
-import com.votingbooth.voteapi.client.law.Law;
-import com.votingbooth.voteapi.client.law.LawClient;
-import com.votingbooth.voteapi.client.law.LawResponse;
-import com.votingbooth.voteapi.client.law.LawStatus;
-import com.votingbooth.voteapi.dto.VoteRequest;
-import com.votingbooth.voteapi.dto.VoteResultResponse;
-import com.votingbooth.voteapi.exception.LawDoesNotExistException;
-import com.votingbooth.voteapi.exception.LawNotOpenException;
-import com.votingbooth.voteapi.exception.LawNotVotedException;
-import com.votingbooth.voteapi.exception.UserAlreadyVotedException;
-import com.votingbooth.voteapi.repository.VoteRepository;
+import com.votingbooth.voteapi.dataaccess.client.law.Law;
+import com.votingbooth.voteapi.dataaccess.client.law.LawClient;
+import com.votingbooth.voteapi.dataaccess.client.law.LawResponse;
+import com.votingbooth.voteapi.dataaccess.client.law.LawStatus;
+import com.votingbooth.voteapi.model.dto.VoteRequest;
+import com.votingbooth.voteapi.model.dto.VoteResultResponse;
+import com.votingbooth.voteapi.model.exception.LawDoesNotExistException;
+import com.votingbooth.voteapi.model.exception.LawNotOpenException;
+import com.votingbooth.voteapi.model.exception.LawNotVotedException;
+import com.votingbooth.voteapi.model.exception.UserAlreadyVotedException;
+import com.votingbooth.voteapi.dataaccess.repository.VoteRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 

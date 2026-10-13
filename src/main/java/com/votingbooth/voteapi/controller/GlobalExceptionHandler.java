@@ -1,5 +1,9 @@
-package com.votingbooth.voteapi.exception;
+package com.votingbooth.voteapi.controller;
 
+import com.votingbooth.voteapi.model.exception.LawDoesNotExistException;
+import com.votingbooth.voteapi.model.exception.LawNotOpenException;
+import com.votingbooth.voteapi.model.exception.LawNotVotedException;
+import com.votingbooth.voteapi.model.exception.UserAlreadyVotedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ExceptionHandler;

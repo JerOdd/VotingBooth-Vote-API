@@ -1,7 +1,7 @@
-package com.votingbooth.voteapi.repository;
+package com.votingbooth.voteapi.dataaccess.repository;
 
-import com.votingbooth.voteapi.entity.Vote;
-import com.votingbooth.voteapi.entity.VoteId;
+import com.votingbooth.voteapi.model.entity.Vote;
+import com.votingbooth.voteapi.model.entity.VoteId;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

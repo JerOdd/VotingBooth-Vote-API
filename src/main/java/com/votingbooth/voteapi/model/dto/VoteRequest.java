@@ -1,4 +1,4 @@
-package com.votingbooth.voteapi.dto;
+package com.votingbooth.voteapi.model.dto;
 
 import java.util.UUID;
 
